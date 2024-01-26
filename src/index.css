@@ -1,4 +1,4 @@
-
+/* 
 @font-face {
     font-family: 'Uber Move';
     src: url('UberMove-Bold.eot');
@@ -53,4 +53,24 @@
   
   *{
     font-family: 'Uber Move' ;
-  }
+  } */
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 30px;
+}
+ 
+::-webkit-scrollbar-thumb {
+  background: rgb(185, 185, 185); 
+  border-radius: 30px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #363636;
+  cursor: pointer;
+}
