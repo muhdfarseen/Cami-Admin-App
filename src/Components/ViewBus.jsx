@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
+import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Group, SegmentedControl, Card, Title } from '@mantine/core';
+import customIconImage from '../assets/Bus.png'; 
 
 function ViewBus() {
     const mapContainerRef = useRef(null);
     const [busMarkers, setBusMarkers] = useState({});
     const [selectedBus, setSelectedBus] = useState('1');
 
-    const customIcon = L.icon({
-        iconUrl: 'https://cdn3d.iconscout.com/3d/premium/thumb/school-bus-6874504-5628890.png',
+    const customIcon = new Icon({
+        iconUrl: customIconImage, 
         iconSize: [82, 82],
-     
         popupAnchor: [0, -32],
     });
 
@@ -37,10 +38,9 @@ function ViewBus() {
         return () => {
             map.remove();
         };
-    }, [selectedBus]); 
+    }, [selectedBus]);
 
     useEffect(() => {
-        
         Object.keys(busMarkers).forEach((bus) => {
             if (bus === selectedBus) {
                 busMarkers[bus].openPopup();
