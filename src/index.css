@@ -57,6 +57,7 @@
     font-family: 'Poppins' ;
   }  */
 
+  html, body {touch-action: none;}
 
 ::-webkit-scrollbar {
   width: 5px;

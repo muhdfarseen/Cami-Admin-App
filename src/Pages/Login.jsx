@@ -15,7 +15,6 @@ function Login() {
     const navigate = useNavigate();
     const handleLogin = () => {
         // Perform your login logic here
-        // For simplicity, I'll navigate to the dashboard directly
         navigate('/CamiADmin');
     };
 

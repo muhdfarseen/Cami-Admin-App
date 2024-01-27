@@ -8,10 +8,18 @@ import SendMessages from '../Components/SendMessages';
 import DeleteDatabase from '../Components/DeleteDatabase';
 import PrintData from '../Components/PrintData';
 import ViewBus from '../Components/ViewBus';
+import { useNavigate } from 'react-router-dom';
+
 
 function Dashboard() {
   const [opened, { open, close, toggle }] = useDisclosure(false);
   const [active, setActive] = React.useState('Student Details');
+
+  const navigate = useNavigate();
+    const handleLogout = () => {
+        // Perform your logout logic here
+        navigate('/');
+    };
 
   const handleNavLinkClick = (value) => {
     setActive(value);
@@ -30,7 +38,6 @@ function Dashboard() {
         align="center"
         direction="row"
         wrap="wrap"
-
       >
 
         <Group>
@@ -38,7 +45,7 @@ function Dashboard() {
           <Title color="white" style={{ color: "white", margin: "0px" }} order={3}>Cami</Title>
         </Group>
 
-        <Button radius="sm" size="xs" variant="filled" color="red"> Log Out </Button>
+        <Button onClick={handleLogout} radius="sm" size="xs" variant="filled" color="red"> Log Out </Button>
 
       </Flex>
       </div>
@@ -48,7 +55,7 @@ function Dashboard() {
         <Drawer.Content>
           <Drawer.Header>
             <Drawer.Title>
-              <img width={40} src="favCami.svg" alt="Menu" />
+              <img width={40} src="favCami.svg" alt="-" />
             </Drawer.Title>
             <Drawer.CloseButton />
           </Drawer.Header>
@@ -92,8 +99,6 @@ function Dashboard() {
           </Drawer.Body>
         </Drawer.Content>
       </Drawer.Root>
-
-
 
       {active === 'Student Details' && <StudentDetails />}
       {active === 'ViewBus' && <ViewBus/>}
