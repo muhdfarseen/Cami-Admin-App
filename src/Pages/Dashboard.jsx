@@ -37,7 +37,7 @@ function Dashboard() {
           <Title color="white" style={{ fontFamily: 'Uber move', color: "white", margin: "0px" }} order={3}>Cami</Title>
         </Group>
 
-        <Button size="xs" variant="filled" color="red"> Log Out </Button>
+        <Button radius="sm" size="xs" variant="filled" color="red"> Log Out </Button>
 
       </Flex>
       </div>
@@ -61,7 +61,7 @@ function Dashboard() {
             />
             <NavLink
               href="#Send Messages"
-              label="Send Messages"
+              label="Messages"
               active={active === 'Send Messages'}
               leftSection={<IconMessage size="1rem" stroke={1.5} />}
               onClick={() => handleNavLinkClick('Send Messages')}
