@@ -1,6 +1,7 @@
 import React from 'react';
 import { useForm } from '@mantine/form';
-import { TextInput, Center, Title, Divider, Text, Button, Paper, PasswordInput } from '@mantine/core';
+import { TextInput, Center, Text, Button, Paper, PasswordInput } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 function Login() {
     const form = useForm({
@@ -10,6 +11,13 @@ function Login() {
             password: (value) => (!value || value.length === 0 ? 'Enter your Password' : null),
         },
     });
+
+    const navigate = useNavigate();
+    const handleLogin = () => {
+        // Perform your login logic here
+        // For simplicity, I'll navigate to the dashboard directly
+        navigate('/CamiADmin');
+    };
 
     return (
         <Center
@@ -27,7 +35,7 @@ function Login() {
                     Sign in to Admin Portal
                 </Text>                          
 
-                <form onSubmit={form.onSubmit(console.log)}>
+                <form onSubmit={form.onSubmit(handleLogin)}>
                     <TextInput
                         mt="sm"
                         radius="md"
@@ -42,7 +50,7 @@ function Login() {
                         placeholder="Password"
                         {...form.getInputProps('password')}
                     />
-                    <Button fullWidth radius="md" type="submit" mt="md" color="black">
+                    <Button fullWidth radius="md" type="submit" mt="md" color="dark">
                         Submit
                     </Button>
                 </form>
