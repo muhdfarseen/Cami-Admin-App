@@ -260,13 +260,7 @@ function PrintData() {
 
     const handlePrint = useReactToPrint({
         content: () => componentRef.current,
-        documentTitle: 'Printed Data',
-        onBeforeGetContent: () => {
-            // You can customize the PDF document here if needed
-        },
-        onAfterPrint: () => {
-            // You can perform additional actions after the print is complete
-        },
+        documentTitle: 'StudentDetails',
     });
 
 

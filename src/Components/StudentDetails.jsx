@@ -253,6 +253,7 @@ function StudentDetails() {
             <Table.Td>{element.Department}</Table.Td>
             <Table.Td>{element.YearBatch}</Table.Td>
             <Table.Td>{element.BusFrom}</Table.Td>
+            <Table.Td>1</Table.Td>
             <Table.Td>
 
                 {element.PassStatus === "Active" ?
@@ -330,6 +331,7 @@ function StudentDetails() {
                                 <Table.Th>Department</Table.Th>
                                 <Table.Th>Batch</Table.Th>
                                 <Table.Th>Bus From</Table.Th>
+                                <Table.Th>Bus No</Table.Th>
                                 <Table.Th>Pass Status</Table.Th>
                                 <Table.Th>Amount Paid</Table.Th>
                                 <Table.Th>Paid On</Table.Th>
@@ -398,6 +400,14 @@ function StudentDetails() {
                     <Input.Wrapper label="Bus from" >
                         <Input variant="filled" placeholder="Address" />
                     </Input.Wrapper>
+                    <NumberInput
+                        label="Assign Bus No"
+                        variant="filled"
+                        placeholder="-"
+                        min={1}
+                        max={6}
+                        
+                    />
                     <NumberInput
                         label="Amount Paid"
                         placeholder="Amount"

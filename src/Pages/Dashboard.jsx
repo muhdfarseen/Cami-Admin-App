@@ -1,12 +1,13 @@
 import React from 'react';
 import { useDisclosure } from '@mantine/hooks';
 import { Drawer, Button, Title, Flex, Text, Group, Burger, NavLink } from '@mantine/core';
-import { IconId, IconMessage, IconTrash, IconPrinter } from '@tabler/icons-react';
+import { IconId, IconBus, IconMessage, IconTrash, IconPrinter } from '@tabler/icons-react';
 import '../assets/favCami.svg';
 import StudentDetails from '../Components/StudentDetails';
 import SendMessages from '../Components/SendMessages';
 import DeleteDatabase from '../Components/DeleteDatabase';
 import PrintData from '../Components/PrintData';
+import ViewBus from '../Components/ViewBus';
 
 function Dashboard() {
   const [opened, { open, close, toggle }] = useDisclosure(false);
@@ -73,6 +74,13 @@ function Dashboard() {
               leftSection={<IconPrinter size="1rem" stroke={1.5} />}
               onClick={() => handleNavLinkClick('Print Data')}
             />
+            <NavLink
+              href="#ViewBus"
+              label="Track Bus"
+              active={active === 'ViewBus'}
+              leftSection={<IconBus size="1rem" stroke={1.5} />}
+              onClick={() => handleNavLinkClick('ViewBus')}
+            />
             <NavLink style={{color:"red"}}
               href="#Delete Database"
               label="Delete Database"
@@ -88,6 +96,7 @@ function Dashboard() {
 
 
       {active === 'Student Details' && <StudentDetails />}
+      {active === 'ViewBus' && <ViewBus/>}
       {active === 'Send Messages' && <SendMessages />}
       {active === 'Print Data' && <PrintData/>}
       {active === 'Delete Database' && <DeleteDatabase />}
