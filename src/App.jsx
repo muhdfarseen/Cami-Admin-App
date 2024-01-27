@@ -7,7 +7,11 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 function App() {
 
   return (
-    <MantineProvider >
+    <MantineProvider theme={{
+      // fontFamily: 'Open sans',
+      // fontFamilyMonospace: 'Open sans',
+      // headings: { fontFamily: 'Open sans' },
+    }}>
       <BrowserRouter>
         <Routes>
           

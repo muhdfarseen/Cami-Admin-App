@@ -35,7 +35,7 @@ function Dashboard() {
 
         <Group>
           <Burger size="sm" color="white" onClick={toggle} aria-label="Toggle navigation" />
-          <Title color="white" style={{ fontFamily: 'Uber move', color: "white", margin: "0px" }} order={3}>Cami</Title>
+          <Title color="white" style={{ color: "white", margin: "0px" }} order={3}>Cami</Title>
         </Group>
 
         <Button radius="sm" size="xs" variant="filled" color="red"> Log Out </Button>

@@ -292,7 +292,7 @@ function StudentDetails() {
 
             <Group px={20} my={20} justify="space-between">
 
-                <Title style={{ fontFamily: 'Uber move' }} order={2}>Student Details</Title>
+                <Title order={2}>Student Details</Title>
 
                 <Group>
                     <Input.Wrapper
@@ -368,7 +368,7 @@ function StudentDetails() {
 
             <Modal centered size="lg" opened={editModalOpened} onClose={closeEditModal} withCloseButton={false}>
 
-                <Title style={{ fontFamily: 'Uber move' }} order={3}> Edit Student Info</Title>
+                <Title order={3}> Edit Student Info</Title>
 
                 <Divider my="xs" label="Personal Info" labelPosition="left" />
                 <Group grow >

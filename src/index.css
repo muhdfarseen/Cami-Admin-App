@@ -50,10 +50,12 @@
     font-style: normal;
     font-display: swap;
   }
-  
+  */
+
+
   *{
-    font-family: 'Uber Move' ;
-  } */
+    font-family: 'Poppins' ;
+  } 
 
 
 ::-webkit-scrollbar {

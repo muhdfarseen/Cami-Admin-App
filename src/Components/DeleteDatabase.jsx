@@ -7,7 +7,7 @@ function DeleteDatabase() {
     return (
         <div>
             <Group px={20} my={20} justify="space-between">
-                <Title style={{ fontFamily: 'Uber move' }} order={2}>Delete Database</Title>
+                <Title order={2}>Delete Database</Title>
             </Group>
             <Flex px={20} >
                 <Card style={{ backgroundColor: '#F6F8FA' }} withBorder radius="md">

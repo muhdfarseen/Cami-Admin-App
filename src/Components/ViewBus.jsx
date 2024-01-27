@@ -57,7 +57,7 @@ function ViewBus() {
     return (
         <div>
             <Group px={20} my={20} justify="space-between">
-                <Title style={{ fontFamily: 'Uber move' }} order={2}>
+                <Title order={2}>
                     Track Campus Bus
                 </Title>
                 <SegmentedControl
