@@ -22,7 +22,7 @@ function Login() {
     return (
         <Center
             style={{
-                minHeight: '100vh',
+                minHeight: '100dvh',
                 display: 'flex',
                 justifyContent: 'center',
                 alignItems: 'center',
