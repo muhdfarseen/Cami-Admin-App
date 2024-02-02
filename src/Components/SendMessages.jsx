@@ -6,10 +6,12 @@ import {
     Center,
     Button,
     Input,
+    Flex,
     Title,
     Textarea,
     Select,
     NumberInput,
+    MultiSelect,
     Badge,
     Card,
     Text,
@@ -67,8 +69,25 @@ function SendMessages() {
                     <Card withBorder radius="md">
                         <Card.Section style={{ backgroundColor: '#F6F8FA' }} withBorder inheritPadding py="xs">
                             <Group justify="space-between">
+
                                 <Text fw={500}>New Message</Text>
-                                <Button radius="md" rightSection={<IconSend size={17} />}>Send</Button>
+
+                                <Flex gap={10} align={"center"} justify={"space-between"} wrap={"wrap"} >
+                                    <MultiSelect
+                                        placeholder="Department"
+                                        data={['All', 'IT', 'CS', 'EC', 'EEE']}
+                                        defaultValue={['All']}
+                                        clearable
+                                    />
+                                    <MultiSelect
+                                        placeholder="Adm Year"
+                                        data={['All', '2020', '2021', '2022', '2023', '2024']}
+                                        defaultValue={['All']}
+                                        clearable
+                                    />
+                                    <Button radius="md" rightSection={<IconSend size={17} />}>Send</Button>
+                                </Flex>
+
                             </Group>
                         </Card.Section>
 
@@ -93,17 +112,20 @@ function SendMessages() {
                             {notifications.map((notification) => (
                                 <Grid.Col key={notification} span={{ base: 12, md: 6, lg: 3 }}>
                                     <Card withBorder radius="md">
-                                        <Text mb="xs" fw={500}>
+                                        <Text fw={500}>
                                             No Bus Tomorrow
                                         </Text>
+                                        <Badge my={10} size='sm' radius={0} variant="light" color="gray">
+                                            Received By : CS, IT, EEE (2024)
+                                        </Badge>
                                         <Text size="sm" c="dimmed">
                                             Due to unforeseen circumstances, there will be no bus service tomorrow. We apologize for any inconvenience caused.
                                         </Text>
-                                        <Group justify="space-between" mt="md">
+                                        <Group justify="space-between" align='center' mt="md">
                                             <Button color="dark" leftSection={<IconTrash size={17} />} radius="md">
                                                 Delete
                                             </Button>
-                                            <Badge leftSection={<IconChecks style={{ width: rem(12), height: rem(12) }} />} variant="outline" color="gray">
+                                            <Badge leftSection={<IconChecks style={{ width: rem(12), height: rem(12) }} />} variant="outline" color="green">
                                                 12 Jan 23
                                             </Badge>
                                         </Group>
