@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import { Icon } from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Group, SegmentedControl, Card, Title } from '@mantine/core';
+import { Flex, SegmentedControl, Card, Title } from '@mantine/core';
 import customIconImage from '../assets/Bus.png'; 
 
 function ViewBus() {
@@ -56,7 +56,8 @@ function ViewBus() {
 
     return (
         <div>
-            <Group px={20} my={20} justify="space-between">
+            
+            <Flex px={20} my={20} align={"center"} justify="space-between" wrap="wrap" gap={15}>
                 <Title order={2}>
                     Track Campus Bus
                 </Title>
@@ -67,10 +68,11 @@ function ViewBus() {
                     value={selectedBus}
                     onChange={handleBusChange}
                 />
-            </Group>
+            </Flex>
+         
 
-            <Card mx={20} shadow="sm" padding="lg" radius="md" withBorder>
-                <div ref={mapContainerRef} style={{ height: '500px', zIndex:'10' }} />
+            <Card m={20} padding="" radius="md" withBorder>
+                <div ref={mapContainerRef} style={{ minHeight: `calc(100dvh - 210px)`, zIndex:'10' }} />
             </Card>
         </div>
     );
