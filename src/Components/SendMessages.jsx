@@ -91,7 +91,7 @@ function SendMessages() {
                             </Group>
                         </Card.Section>
 
-                        <Textarea minRows={1} autosize mt={10} resize="vertical" label="Subject" placeholder='Heading...' />
+                        <Textarea minRows={1} autosize mt={10} resize="vertical" label="Subject" placeholder='heading...' />
                         <Textarea minRows={4} autosize mt={10} resize="vertical" label="Description" placeholder='description...' />
                     </Card>
                 </Box>
