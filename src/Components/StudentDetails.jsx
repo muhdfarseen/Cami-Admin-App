@@ -7,15 +7,60 @@ import axios from 'axios';
 
 function StudentDetails() {
 
+    const baseURL = 'http://localhost:3000';
+
     const icon = <IconInfoCircle />;
-    const [deleteModalOpened, { open: openDeleteModal, close: closeDeleteModal }] = useDisclosure(false);
+    const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+
+    const openDeleteModal = (studentId) => {
+        setDeleteModalStudentId(studentId); // Set the student ID
+        setDeleteModalOpened(true);
+    };
+
+    const closeDeleteModal = () => {
+        setDeleteModalOpened(false);
+    };
     const [editModalOpened, { open: openEditModal, close: closeEditModal }] = useDisclosure(false);
 
+    const [students, setStudents] = useState([]);
+    const [register_number, setregister_number] = useState(null);
+
+    const [registerNumberFilter, setRegisterNumberFilter] = useState('');
+    const [departmentFilter, setDepartmentFilter] = useState('');
+    const [admissionYearFilter, setAdmissionYearFilter] = useState('');
+    const [deleteModalStudentId, setDeleteModalStudentId] = useState(null);
+
+
+    const filteredStudents = students.filter(student => {
+        if (registerNumberFilter && student.register_number !== registerNumberFilter) {
+            return false;
+        }
+        if (departmentFilter && student.department !== departmentFilter) {
+            return false;
+        }
+        if (admissionYearFilter && student.admission_year !== admissionYearFilter) {
+            return false;
+        }
+        return true;
+    });
+
     const handleDeleteClick = () => {
-        // Perform delete action here
-        // Then close the delete modal
-        closeDeleteModal();
+        axios.delete(`${baseURL}/student/${deleteModalStudentId}`)
+            .then(response => {
+                // Student deleted successfully, update the state
+                setStudents(prevStudents => prevStudents.filter(student => student.register_number !== deleteModalStudentId));
+                // Then close the delete modal
+                console.log('deleted');
+                closeDeleteModal();
+            })
+            .catch(error => {
+                console.error('Error deleting student:', error);
+                // Handle error
+            });
     };
+    
+
+
 
     const handleEditClick = () => {
         // Perform edit action here
@@ -23,7 +68,6 @@ function StudentDetails() {
         closeEditModal();
     };
 
-    const [students, setStudents] = useState([]);
 
     const formatDateString = (dateString) => {
         const date = new Date(dateString);
@@ -35,7 +79,7 @@ function StudentDetails() {
     };
 
     useEffect(() => {
-        axios.get('http://localhost:3000/students')
+        axios.get(`${baseURL}/students`)
             .then(response => {
                 setStudents(response.data);
             })
@@ -45,7 +89,7 @@ function StudentDetails() {
     }, []);
 
 
-    const rows = students.map((student, index) => (
+    const rows = filteredStudents.map((student, index) => (
         <Table.Tr key={index}>
             <Table.Td>{student.register_number}</Table.Td>
             <Table.Td><b>{student.full_name}</b></Table.Td>
@@ -72,7 +116,12 @@ function StudentDetails() {
                 <ActionIcon variant="transparent" aria-label="edit" onClick={openEditModal}>
                     <IconEdit style={{ width: '70%', height: '70%' }} stroke={1.5} />
                 </ActionIcon>
-                <ActionIcon variant="transparent" color="red" aria-label="delete" onClick={openDeleteModal}>
+                <ActionIcon
+                    variant="transparent"
+                    color="red"
+                    aria-label="delete"
+                    onClick={() => openDeleteModal(student.register_number)}
+                >
                     <IconTrash style={{ width: '70%', height: '70%' }} stroke={1.5} />
                 </ActionIcon>
             </Table.Td>
@@ -88,24 +137,27 @@ function StudentDetails() {
                 <Title order={2}>Student Details</Title>
 
                 <Group>
-                    <Input.Wrapper
-                    //label="Search By Register Number"
-                    >
+                    <Input.Wrapper>
                         <Input
-                            placeholder="Enter Register Number"
-                            leftSection={<IconUserSearch size={16} />} />
+                            placeholder="Search By Register Number"
+                            leftSection={<IconUserSearch size={16} />}
+                            value={registerNumberFilter}
+                            onChange={event => setRegisterNumberFilter(event.target.value)}
+                        />
                     </Input.Wrapper>
                     <Select
-                        //label="Filter By Dept"
-                        placeholder="Choose Department"
-                        data={['IT', 'CS', 'EC', 'EEE']}
+                        placeholder="Filter By Dept"
+                        data={['', 'IT', 'CS', 'EC', 'EEE']}
+                        value={departmentFilter}
+                        onChange={value => setDepartmentFilter(value)}
                         leftSection={<IconListSearch size={16} />}
                     />
                     <NumberInput
-                        // label="Filter By Year Batch"
-                        placeholder="Enter Year"
+                        placeholder="Filter By Year Batch"
                         min={2020}
                         max={2090}
+                        value={admissionYearFilter}
+                        onChange={value => setAdmissionYearFilter(value)}
                         leftSection={<IconCalendarSearch size={16} />}
                     />
                 </Group>
