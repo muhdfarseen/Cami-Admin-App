@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react';
 import { Group, Box, Text, Switch, Divider, Input, rem, Button, Modal, Badge, Alert, Title, Select, NumberInput, Table, Card, ScrollArea, ActionIcon } from '@mantine/core';
 import { IconEdit, IconTrash, IconCurrencyRupee, IconInfoCircle, IconUserSearch, IconListSearch, IconCalendarSearch } from '@tabler/icons-react';
 import { useDisclosure } from '@mantine/hooks';
 import { DateInput } from '@mantine/dates';
+import axios from 'axios';
 
 function StudentDetails() {
 
@@ -22,259 +23,50 @@ function StudentDetails() {
         closeEditModal();
     };
 
-    const elements = [
-        {
-            "Name": "John Doe",
-            "RegisterNumber": "R001",
-            "Department": "Computer Science",
-            "YearBatch": "2023",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 500,
-            "FeePaidDate": "2024-01-01",
-            "BusPassExpiresOn": "2024-12-31"
-        },
-        {
-            "Name": "Jane Smith",
-            "RegisterNumber": "R002",
-            "Department": "Electrical Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Alice Johnson",
-            "RegisterNumber": "R003",
-            "Department": "Mechanical Engineering",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 600,
-            "FeePaidDate": "2024-02-15",
-            "BusPassExpiresOn": "2024-11-30"
-        },
-        {
-            "Name": "Bob Wilson",
-            "RegisterNumber": "R004",
-            "Department": "Civil Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 450,
-            "FeePaidDate": "2023-12-10",
-            "BusPassExpiresOn": "2024-10-31"
-        },
-        {
-            "Name": "Eva Martinez",
-            "RegisterNumber": "R005",
-            "Department": "Chemical Engineering",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Michael Brown",
-            "RegisterNumber": "R006",
-            "Department": "Computer Science",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 550,
-            "FeePaidDate": "2024-03-20",
-            "BusPassExpiresOn": "2024-09-30"
-        },
-        {
-            "Name": "Sophia Lee",
-            "RegisterNumber": "R007",
-            "Department": "Electrical Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 480,
-            "FeePaidDate": "2023-11-05",
-            "BusPassExpiresOn": "2024-08-31"
-        },
-        {
-            "Name": "Daniel White",
-            "RegisterNumber": "R008",
-            "Department": "Mechanical Engineering",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Olivia Davis",
-            "RegisterNumber": "R009",
-            "Department": "Civil Engineering",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 520,
-            "FeePaidDate": "2024-04-15",
-            "BusPassExpiresOn": "2024-07-31"
-        },
-        {
-            "Name": "Christopher Harris",
-            "RegisterNumber": "R010",
-            "Department": "Chemical Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 400,
-            "FeePaidDate": "2023-09-22",
-            "BusPassExpiresOn": "2024-06-30"
-        },
-        {
-            "Name": "Emma Smith",
-            "RegisterNumber": "R011",
-            "Department": "Computer Science",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Liam Johnson",
-            "RegisterNumber": "R012",
-            "Department": "Electrical Engineering",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 530,
-            "FeePaidDate": "2024-05-12",
-            "BusPassExpiresOn": "2024-05-31"
-        },
-        {
-            "Name": "Ava Wilson",
-            "RegisterNumber": "R013",
-            "Department": "Mechanical Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 470,
-            "FeePaidDate": "2023-07-18",
-            "BusPassExpiresOn": "2024-04-30"
-        },
-        {
-            "Name": "Noah Martinez",
-            "RegisterNumber": "R014",
-            "Department": "Civil Engineering",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Isabella Brown",
-            "RegisterNumber": "R015",
-            "Department": "Chemical Engineering",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 580,
-            "FeePaidDate": "2024-06-25",
-            "BusPassExpiresOn": "2024-03-31"
-        },
-        {
-            "Name": "Mason Lee",
-            "RegisterNumber": "R016",
-            "Department": "Computer Science",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 490,
-            "FeePaidDate": "2023-04-09",
-            "BusPassExpiresOn": "2024-02-28"
-        },
-        {
-            "Name": "Charlotte White",
-            "RegisterNumber": "R017",
-            "Department": "Electrical Engineering",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        },
-        {
-            "Name": "Carter Davis",
-            "RegisterNumber": "R018",
-            "Department": "Mechanical Engineering",
-            "YearBatch": "2024",
-            "BusFrom": "Downtown Terminal",
-            "PassStatus": "Active",
-            "FeePaidAmount": 510,
-            "FeePaidDate": "2024-09-10",
-            "BusPassExpiresOn": "2024-01-31"
-        },
-        {
-            "Name": "Amelia Harris",
-            "RegisterNumber": "R019",
-            "Department": "Civil Engineering",
-            "YearBatch": "2022",
-            "BusFrom": "City Center",
-            "PassStatus": "Active",
-            "FeePaidAmount": 420,
-            "FeePaidDate": "2023-01-14",
-            "BusPassExpiresOn": "2023-12-31"
-        },
-        {
-            "Name": "Logan Smith",
-            "RegisterNumber": "R020",
-            "Department": "Chemical Engineering",
-            "YearBatch": "2023",
-            "BusFrom": "Suburb Station",
-            "PassStatus": "Inactive",
-            "FeePaidAmount": 0,
-            "FeePaidDate": null,
-            "BusPassExpiresOn": null
-        }
-    ];
+    const [students, setStudents] = useState([]);
+
+    const formatDateString = (dateString) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+        });
+    };
+
+    useEffect(() => {
+        axios.get('http://localhost:3000/students')
+            .then(response => {
+                setStudents(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching student details:', error);
+            });
+    }, []);
 
 
-    const rows = elements.map((element, index) => (
+    const rows = students.map((student, index) => (
         <Table.Tr key={index}>
-            <Table.Td>{element.RegisterNumber}</Table.Td>
-            <Table.Td><b>{element.Name}</b></Table.Td>
-            <Table.Td>{element.Department}</Table.Td>
-            <Table.Td>{element.YearBatch}</Table.Td>
-            <Table.Td>{element.BusFrom}</Table.Td>
-            <Table.Td>1</Table.Td>
+            <Table.Td>{student.register_number}</Table.Td>
+            <Table.Td><b>{student.full_name}</b></Table.Td>
+            <Table.Td>{student.department}</Table.Td>
+            <Table.Td>{student.admission_year}</Table.Td>
+            <Table.Td>{student.bus_from}</Table.Td>
+            <Table.Td>{student.bus_number}</Table.Td>
             <Table.Td>
-
-                {element.PassStatus === "Active" ?
+                {student.pass_status === 1 ?
                     (<Badge variant="light" color="green">Active</Badge>) :
                     (<Badge variant="light" color="yellow">Inactive</Badge>)}
+            </Table.Td>
+            <Table.Td>
+                {student.amount_paid === '0' ? (<>--</>) : (<b>₹{student.amount_paid}</b>)}
+            </Table.Td>
+            <Table.Td>
+                {student.paid_on === null ? (<>--</>) : formatDateString(student.paid_on)}
+            </Table.Td>
 
-            </Table.Td>
             <Table.Td>
-                {element.FeePaidAmount === 0 ? (<>--</>) : (<b>₹{element.FeePaidAmount}</b>)}
-            </Table.Td>
-            <Table.Td>
-                {element.FeePaidAmount === 0 ? (<>--</>) : (element.FeePaidDate)}
-            </Table.Td>
-            <Table.Td>
-                {element.BusPassExpiresOn === null ? (
-                    <>--</>
-                ) : (
-                    <>
-                        {element.BusPassExpiresOn}
-                    </>
-                )}
+                {student.pass_expires_on === null ? (<>--</>) : formatDateString(student.pass_expires_on)}
             </Table.Td>
             <Table.Td>
                 <ActionIcon variant="transparent" aria-label="edit" onClick={openEditModal}>
@@ -286,6 +78,7 @@ function StudentDetails() {
             </Table.Td>
         </Table.Tr>
     ));
+
 
     return (
         <div>
@@ -329,7 +122,7 @@ function StudentDetails() {
                                 <Table.Th style={{ borderRadius: '15px 0px 0px 15px' }}>Reg No</Table.Th>
                                 <Table.Th>Name</Table.Th>
                                 <Table.Th>Department</Table.Th>
-                                <Table.Th>Batch</Table.Th>
+                                <Table.Th>Admsn Year</Table.Th>
                                 <Table.Th>Bus From</Table.Th>
                                 <Table.Th>Bus No</Table.Th>
                                 <Table.Th>Pass Status</Table.Th>
@@ -406,7 +199,7 @@ function StudentDetails() {
                         placeholder="-"
                         min={1}
                         max={6}
-                        
+
                     />
                     <NumberInput
                         label="Amount Paid"
