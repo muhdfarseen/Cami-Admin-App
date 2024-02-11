@@ -4,11 +4,14 @@ import { Group, PinInput, Card, Text, Button, Flex, Title } from '@mantine/core'
 import { IconTrash } from '@tabler/icons-react';
 
 function DeleteDatabase() {
+
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const [year, setYear] = useState('');
 
     const handleDelete = async () => {
         try {
-            await axios.delete(`http://localhost:3000/delete-student/${year}`);
+            await axios.delete(`${baseUrl}/delete-student/${year}`);
             alert("data deleted")
         } catch (error) {
             console.error('Error deleting students:', error);

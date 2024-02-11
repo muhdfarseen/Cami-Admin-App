@@ -17,7 +17,6 @@ function Dashboard() {
 
   const navigate = useNavigate();
     const handleLogout = () => {
-        // Perform your logout logic here
         navigate('/');
     };
 

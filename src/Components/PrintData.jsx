@@ -5,6 +5,9 @@ import { useReactToPrint } from 'react-to-print';
 import axios from 'axios';
 
 function PrintData() {
+
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const [students, setStudents] = useState([]);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
     const [selectedBusNumber, setSelectedBusNumber] = useState(null);
@@ -16,7 +19,7 @@ function PrintData() {
     }, []);
 
     const fetchData = () => {
-        axios.get('http://localhost:3000/students')
+        axios.get(`${baseUrl}/students`)
             .then(response => {
                 // Filter students with an active pass
                 const activeStudents = response.data.filter(student => student.pass_status === 1);

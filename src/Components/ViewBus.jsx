@@ -7,6 +7,9 @@ import { Flex, SegmentedControl, Card, Title } from '@mantine/core';
 import customIconImage from '../assets/Bus.png';
 
 function ViewBus() {
+
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const mapContainerRef = useRef(null);
     const [busMarkers, setBusMarkers] = useState({});
     const [selectedBus, setSelectedBus] = useState('1');
@@ -21,7 +24,7 @@ function ViewBus() {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:3000/bus-locations');
+                const response = await axios.get(`${baseUrl}/bus-locations`);
                 const busLocations = response.data;
                 setApiResponse(busLocations);
             } catch (error) {
@@ -29,15 +32,12 @@ function ViewBus() {
             }
         };
     
-        // Initial fetch
         fetchData();
     
-        // Fetch data every 3 seconds
         const intervalId = setInterval(() => {
             fetchData();
         }, 3000);
     
-        // Cleanup function to clear the interval when the component unmounts
         return () => {
             clearInterval(intervalId);
         };

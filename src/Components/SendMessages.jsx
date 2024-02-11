@@ -21,6 +21,9 @@ import {
 import { IconSend, IconChecks, IconTrash, IconMessagePlus, IconMessageCheck } from '@tabler/icons-react';
 
 function SendMessages() {
+
+    const baseUrl = import.meta.env.VITE_BASE_URL;
+
     const [activeTab, setActiveTab] = useState('Compose');
     const [messages, setMessages] = useState([]);
 
@@ -56,7 +59,7 @@ function SendMessages() {
 
     const composeMessage = () => {
         // Make a POST request to your server's API endpoint
-        fetch('http://localhost:3000/compose-message', {
+        fetch(`${baseUrl}/compose-message`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -84,7 +87,7 @@ function SendMessages() {
 
     useEffect(() => {
         if (activeTab === 'Delivered') {
-            fetch('http://localhost:3000/delivered-messages')
+            fetch(`${baseUrl}/delivered-messages`)
                 .then(response => {
                     if (!response.ok) {
                         throw new Error('Failed to fetch delivered messages');
@@ -103,7 +106,7 @@ function SendMessages() {
     }, [activeTab]);
 
     const fetchDeliveredMessages = () => {
-        fetch('http://localhost:3000/delivered-messages')
+        fetch(`${baseUrl}/delivered-messages`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Failed to fetch delivered messages');
@@ -122,7 +125,7 @@ function SendMessages() {
 
 
     const deleteMessage = (msg_id) => {
-        fetch(`http://localhost:3000/message/${msg_id}`, {
+        fetch(`${baseUrl}/message/${msg_id}`, {
             method: 'DELETE',
         })
             .then(response => {
@@ -139,7 +142,7 @@ function SendMessages() {
     };
 
     const deleteAllMessages = () => {
-        fetch('http://localhost:3000/delete-all-messages', {
+        fetch(`${baseUrl}/delete-all-messages`, {
             method: 'DELETE',
         })
             .then(response => {
