@@ -13,10 +13,17 @@ function Login() {
     });
 
     const navigate = useNavigate();
+
     const handleLogin = () => {
-        // Perform your login logic here
-        navigate('/CamiADmin');
+        const { AdminId, password } = form.values;
+    
+        if (AdminId === 'admin' && password === '1234') {
+            navigate('/CamiADmin');
+        } else {
+            alert('Invalid credentials');
+        }
     };
+    
 
     return (
         <Center
@@ -38,8 +45,8 @@ function Login() {
                     <TextInput
                         mt="sm"
                         radius="md"
-                        label="Admin ID"
-                        placeholder="ID"
+                        label="Username"
+                        placeholder=""
                         {...form.getInputProps('AdminId')}
                     />
                     <PasswordInput
