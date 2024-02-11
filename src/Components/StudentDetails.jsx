@@ -13,7 +13,7 @@ function StudentDetails() {
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
 
     const openDeleteModal = (studentId) => {
-        setDeleteModalStudentId(studentId); // Set the student ID
+        setDeleteModalStudentId(studentId);
         setDeleteModalOpened(true);
     };
 
@@ -29,6 +29,29 @@ function StudentDetails() {
     const [departmentFilter, setDepartmentFilter] = useState('');
     const [admissionYearFilter, setAdmissionYearFilter] = useState('');
     const [deleteModalStudentId, setDeleteModalStudentId] = useState(null);
+
+    const [selectedStudent, setSelectedStudent] = useState({
+        register_number: '',
+        full_name: '',
+        dob: '',
+        department: '',
+        admission_year: '',
+        bus_from: '',
+        bus_number: '',
+        pass_status: '',
+        amount_paid: '',
+        paid_on: '',
+        pass_expires_on: ''
+    });
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setSelectedStudent(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
 
 
     const filteredStudents = students.filter(student => {
@@ -47,27 +70,26 @@ function StudentDetails() {
     const handleDeleteClick = () => {
         axios.delete(`${baseURL}/student/${deleteModalStudentId}`)
             .then(response => {
-                // Student deleted successfully, update the state
                 setStudents(prevStudents => prevStudents.filter(student => student.register_number !== deleteModalStudentId));
-                // Then close the delete modal
-                console.log('deleted');
                 closeDeleteModal();
+                alert('deleted');
             })
             .catch(error => {
                 console.error('Error deleting student:', error);
-                // Handle error
             });
     };
-    
 
-
-
-    const handleEditClick = () => {
-        // Perform edit action here
-        // Then close the edit modal
-        closeEditModal();
+    const formatDate = (date) => {
+        const formattedDate = new Date(date).toISOString().split('T')[0];
+        return formattedDate;
     };
 
+
+
+    const handleEditClick = (student) => {
+        setSelectedStudent(student);
+        openEditModal();
+    };
 
     const formatDateString = (dateString) => {
         const date = new Date(dateString);
@@ -88,10 +110,49 @@ function StudentDetails() {
             });
     }, []);
 
+    const handleSaveClick = () => {
+        const formattedPaidOn = formatDate(selectedStudent.paid_on);
+        const formattedPassExpiresOn = formatDate(selectedStudent.pass_expires_on);
+    
+        // Check if password-DOB is not null or empty before saving
+        if (!selectedStudent.dob) {
+            alert('Please provide a value for the Date of Birth');
+            return;
+        }
+    
+        const updatedStudent = {
+            ...selectedStudent,
+            paid_on: formattedPaidOn,
+            pass_expires_on: formattedPassExpiresOn
+        };
+    
+        axios.put(`${baseURL}/student/${selectedStudent.register_number}`, updatedStudent)
+            .then(response => {
+                console.log('Student data updated successfully:', response.data);
+                closeEditModal();
+                fetchStudents();
+            })
+            .catch(error => {
+                console.error('Error updating student data:', error);
+            });
+    };
+    
+    
+    
+    const fetchStudents = () => {
+        axios.get(`${baseURL}/students`)
+            .then(response => {
+                setStudents(response.data);
+            })
+            .catch(error => {
+                console.error('Error fetching student details:', error);
+            });
+    };
 
     const rows = filteredStudents.map((student, index) => (
         <Table.Tr key={index}>
             <Table.Td>{student.register_number}</Table.Td>
+            <Table.Td>{student.dob}</Table.Td>
             <Table.Td><b>{student.full_name}</b></Table.Td>
             <Table.Td>{student.department}</Table.Td>
             <Table.Td>{student.admission_year}</Table.Td>
@@ -113,29 +174,20 @@ function StudentDetails() {
                 {student.pass_expires_on === null ? (<>--</>) : formatDateString(student.pass_expires_on)}
             </Table.Td>
             <Table.Td>
-                <ActionIcon variant="transparent" aria-label="edit" onClick={openEditModal}>
+                <ActionIcon variant="transparent" aria-label="edit" onClick={() => handleEditClick(student)}>
                     <IconEdit style={{ width: '70%', height: '70%' }} stroke={1.5} />
                 </ActionIcon>
-                <ActionIcon
-                    variant="transparent"
-                    color="red"
-                    aria-label="delete"
-                    onClick={() => openDeleteModal(student.register_number)}
-                >
+                <ActionIcon variant="transparent" color="red" aria-label="delete" onClick={() => openDeleteModal(student.register_number)}>
                     <IconTrash style={{ width: '70%', height: '70%' }} stroke={1.5} />
                 </ActionIcon>
             </Table.Td>
         </Table.Tr>
     ));
 
-
     return (
         <div>
-
             <Group px={20} my={20} justify="space-between">
-
                 <Title order={2}>Student Details</Title>
-
                 <Group>
                     <Input.Wrapper>
                         <Input
@@ -161,17 +213,14 @@ function StudentDetails() {
                         leftSection={<IconCalendarSearch size={16} />}
                     />
                 </Group>
-
             </Group>
-
             <Card px={20} py={0} >
-
                 <ScrollArea style={{ height: 'calc(100vh - 160px)', overflowY: 'auto' }} type="scroll" scrollbarSize={7}>
-
                     <Table stickyHeader verticalSpacing="sm" horizontalSpacing="sm" withRowBorders={false} >
                         <Table.Thead style={{ background: '#EFEFEF', borderRadius: '20px' }}>
                             <Table.Tr>
                                 <Table.Th style={{ borderRadius: '15px 0px 0px 15px' }}>Reg No</Table.Th>
+                                <Table.Th>DOB</Table.Th>
                                 <Table.Th>Name</Table.Th>
                                 <Table.Th>Department</Table.Th>
                                 <Table.Th>Admsn Year</Table.Th>
@@ -184,22 +233,14 @@ function StudentDetails() {
                                 <Table.Th style={{ borderRadius: '0px 15px 15px 0px' }}>Action</Table.Th>
                             </Table.Tr>
                         </Table.Thead>
-
                         <Table.Tbody>
-
                             {rows}
-
                         </Table.Tbody>
-
-
                     </Table>
                 </ScrollArea>
-
-
             </Card>
 
             {/* Modal For delete user confirmation */}
-
             <Modal centered opened={deleteModalOpened} onClose={closeDeleteModal} withCloseButton={false}>
                 <Alert variant="light" color="red" title="Confirm Deletion" icon={icon}>
                     Are you sure you want to delete this user? This action cannot be undone. <br />
@@ -210,82 +251,130 @@ function StudentDetails() {
             </Modal>
 
             {/* Modal For edit user */}
-
             <Modal centered size="lg" opened={editModalOpened} onClose={closeEditModal} withCloseButton={false}>
-
                 <Title order={3}> Edit Student Info</Title>
-
                 <Divider my="xs" label="Personal Info" labelPosition="left" />
                 <Group grow >
+                    {/* Register Number */}
                     <Input.Wrapper label="Register Number" >
-                        <Input variant="filled" placeholder="Register Number" />
+                        <Input
+                            variant="filled"
+                            placeholder="Register Number"
+                            defaultValue={selectedStudent.register_number}
+                            onChange={event => setSelectedStudent(prevState => ({ ...prevState, register_number: event.target.value }))}
+                        />
                     </Input.Wrapper>
+                    {/* Name */}
                     <Input.Wrapper label="Name" >
-                        <Input variant="filled" placeholder="Name" />
+                        <Input
+                            variant="filled"
+                            placeholder="Name"
+                            defaultValue={selectedStudent.full_name}
+                            onChange={event => setSelectedStudent(prevState => ({ ...prevState, full_name: event.target.value }))}
+                        />
                     </Input.Wrapper>
                 </Group>
                 <Group grow mt={20}>
+
+                    <Input.Wrapper label="Date of Birth">
+                        <Input
+                            variant="filled"
+                            placeholder="dd/mm/yyyy"
+                            defaultValue={selectedStudent.dob}
+                            onChange={event => setSelectedStudent(prevState => ({ ...prevState, dob: event.target.value }))}                            name="password-DOB" // Ensure that name matches the property name exactly
+                        />
+                    </Input.Wrapper>
+
                     <Select
                         label="Department"
                         variant="filled"
                         placeholder="Choose Department"
                         data={['IT', 'CS', 'EC', 'EEE']}
-
+                        value={selectedStudent.department}
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, department: value }))}
                     />
+                    {/* Admission Year */}
                     <NumberInput
                         label="Admission Year"
                         placeholder="Year"
                         variant="filled"
                         min={2020}
                         max={2090}
+                        value={selectedStudent.admission_year}
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, admission_year: value }))}
                     />
                 </Group>
                 <Divider mt={20} my="xs" label="Bus Pass Info" labelPosition="left" />
                 <Group grow>
+                    {/* Bus from */}
                     <Input.Wrapper label="Bus from" >
-                        <Input variant="filled" placeholder="Address" />
+                        <Input
+                            variant="filled"
+                            placeholder="Address"
+                            defaultValue={selectedStudent.bus_from}
+                            onChange={event => setSelectedStudent(prevState => ({ ...prevState, bus_from: event.target.value }))}
+                        />
                     </Input.Wrapper>
+                    {/* Assign Bus No */}
                     <NumberInput
                         label="Assign Bus No"
                         variant="filled"
                         placeholder="-"
                         min={1}
                         max={6}
-
+                        value={selectedStudent.bus_number}
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, bus_number: value }))}
                     />
+                    {/* Amount Paid */}
                     <NumberInput
                         label="Amount Paid"
                         placeholder="Amount"
                         hideControls
                         leftSection={<IconCurrencyRupee style={{ width: rem(20), height: rem(20) }} stroke={1.5} />}
+                        value={selectedStudent.amount_paid}
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, amount_paid: value }))}
                     />
                 </Group>
-
                 <Group mt={20} grow>
+                    {/* Date of Payment */}
                     <DateInput
                         clearable
                         label="Date of Payment"
                         placeholder="DD/MM/YYYY"
+                        value={selectedStudent.paid_on ? new Date(selectedStudent.paid_on) : null} // Convert the date string to a Date object or null
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, paid_on: value ? value.toISOString() : null }))} // Convert the Date object to a string
                     />
                     <DateInput
                         clearable
                         label="Pass Expires On"
                         placeholder="DD/MM/YYYY"
+                        value={selectedStudent.pass_expires_on ? new Date(selectedStudent.pass_expires_on) : null} // Convert the date string to a Date object or null
+                        onChange={value => setSelectedStudent(prevState => ({ ...prevState, pass_expires_on: value ? value.toISOString() : null }))} // Convert the Date object to a string
                     />
+
                     <Box>
+                        {/* Activate Bus Pass */}
                         <Text size="sm" fw={500} >   Activate Bus Pass</Text>
-                        <Switch mt={5} size="lg" onLabel="Active" offLabel="Inactive" />
+                        <Switch
+                            mt={5}
+                            size="lg"
+                            onLabel="Active"
+                            offLabel="Inactive"
+                            defaultChecked={selectedStudent.pass_status === 1}
+                            onChange={() => setSelectedStudent(prevState => ({ ...prevState, pass_status: selectedStudent.pass_status === 1 ? 0 : 1 }))}
+                        />
                     </Box>
                 </Group>
                 <Group mt={30} grow>
-                    <Button variant='outline' color='red'>Cancel</Button>
-                    <Button color='green'>Save</Button>
+                    {/* Cancel Button */}
+                    <Button variant='outline' color='red' onClick={closeEditModal}>Cancel</Button>
+                    {/* Save Button */}
+                    <Button color='green' onClick={handleSaveClick}>Save</Button>
                 </Group>
             </Modal>
-
 
         </div >
     )
 }
 
-export default StudentDetails
+export default StudentDetails;
