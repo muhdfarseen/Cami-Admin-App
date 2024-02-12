@@ -6,11 +6,11 @@ import { DateInput } from '@mantine/dates';
 import axios from 'axios';
 
 function StudentDetails() {
-
     const baseURL = import.meta.env.VITE_BASE_URL;
 
     const icon = <IconInfoCircle />;
     const [deleteModalOpened, setDeleteModalOpened] = useState(false);
+    const [olderRegisterNumber, setOlderRegisterNumber] = useState(null); // State variable for older register number
 
     const openDeleteModal = (studentId) => {
         setDeleteModalStudentId(studentId);
@@ -52,8 +52,6 @@ function StudentDetails() {
         }));
     };
 
-
-
     const filteredStudents = students.filter(student => {
         if (registerNumberFilter && student.register_number !== registerNumberFilter) {
             return false;
@@ -84,10 +82,9 @@ function StudentDetails() {
         return formattedDate;
     };
 
-
-
     const handleEditClick = (student) => {
         setSelectedStudent(student);
+        setOlderRegisterNumber(student.register_number); // Set the older register number when editing
         openEditModal();
     };
 
@@ -113,32 +110,31 @@ function StudentDetails() {
     const handleSaveClick = () => {
         const formattedPaidOn = formatDate(selectedStudent.paid_on);
         const formattedPassExpiresOn = formatDate(selectedStudent.pass_expires_on);
-    
-        // Check if password-DOB is not null or empty before saving
+
+        console.log("Selected Student before save:", selectedStudent);
+
         if (!selectedStudent.dob) {
             alert('Please provide a value for the Date of Birth');
             return;
         }
-    
+
         const updatedStudent = {
             ...selectedStudent,
             paid_on: formattedPaidOn,
             pass_expires_on: formattedPassExpiresOn
         };
-    
-        axios.put(`${baseURL}/student/${selectedStudent.register_number}`, updatedStudent)
+
+        axios.put(`${baseURL}/student/${olderRegisterNumber}`, updatedStudent)
             .then(response => {
-                console.log('Student data updated successfully:', response.data);
+                alert('Student data updated successfully:', response.data);
                 closeEditModal();
                 fetchStudents();
             })
             .catch(error => {
-                console.error('Error updating student data:', error);
+                alert('Error updating student data:', error);
             });
     };
-    
-    
-    
+
     const fetchStudents = () => {
         axios.get(`${baseURL}/students`)
             .then(response => {
